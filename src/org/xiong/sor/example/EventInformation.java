@@ -1,4 +1,4 @@
-package org.xiong.sor;
+package org.xiong.sor.example;
 
 public class EventInformation {
     public static final int size = 4602;

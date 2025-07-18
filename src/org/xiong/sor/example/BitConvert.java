@@ -1,4 +1,4 @@
-package org.xiong.sor;
+package org.xiong.sor.example;
 
 public class BitConvert {
     public static long toInt64(byte[] buffer, int pos) {

@@ -3,11 +3,11 @@ package org.xiong.sor.blocks;
 public class MapBlock {
     static class BlockMeta{
         String bid; // block id
-        int reversionId=0&0x0FFFF; // unsigned short
+        int reversionId=0; // unsigned short
         long size=0;
     }
     private String mbId="Map\\0";
-    private int mrn=0&0x0FFFF; // unsigned short
+    private int mrn=0; // unsigned short
     private long mbs=0L;
     private short nb=5;
     private BlockMeta[] metaInfo;

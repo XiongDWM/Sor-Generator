@@ -1,4 +1,4 @@
-package org.xiong.sor;
+package org.xiong.sor.example;
 
 public class DataSor {
     final String defAliasName = "OTDR";

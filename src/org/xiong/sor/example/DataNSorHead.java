@@ -1,4 +1,4 @@
-package org.xiong.sor;
+package org.xiong.sor.example;
 
 public class DataNSorHead {
     public static final int size = 102;
