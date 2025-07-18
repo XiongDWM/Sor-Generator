@@ -1,5 +1,8 @@
 package org.xiong.sor.blocks;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 public class GeneralParametersBlock {
     private String pdId="GenParams\\0";
     private String lc="CH"; // language code default chinese
@@ -127,4 +130,61 @@ public class GeneralParametersBlock {
     public void setCmt(String cmt) {
         this.cmt = cmt;
     }
+
+
+    public byte[] toBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(256);
+
+        byte[] pdIdBytes = pdId.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)pdIdBytes.length);
+        buffer.put(pdIdBytes);
+
+        byte[] lcBytes = lc.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)lcBytes.length);
+        buffer.put(lcBytes);
+
+        byte[] cidBytes = cid.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)cidBytes.length);
+        buffer.put(cidBytes);
+
+        byte[] fidBytes = fid.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)fidBytes.length);
+        buffer.put(fidBytes);
+
+        buffer.putShort(ft);
+        buffer.putShort(nw);
+
+        byte[] olBytes = ol.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)olBytes.length);
+        buffer.put(olBytes);
+
+        byte[] tlBytes = tl.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)tlBytes.length);
+        buffer.put(tlBytes);
+
+        byte[] ccdBytes = ccd.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)ccdBytes.length);
+        buffer.put(ccdBytes);
+
+        byte[] cdfBytes = cdf.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)cdfBytes.length);
+        buffer.put(cdfBytes);
+
+        buffer.putLong(uo);
+        buffer.putLong(uod);
+
+        byte[] opBytes = op.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)opBytes.length);
+        buffer.put(opBytes);
+
+        byte[] cmtBytes = cmt.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)cmtBytes.length);
+        buffer.put(cmtBytes);
+
+        byte[] result = new byte[buffer.position()];
+        buffer.flip();
+        buffer.get(result);
+        return result;
+    }
+
 }

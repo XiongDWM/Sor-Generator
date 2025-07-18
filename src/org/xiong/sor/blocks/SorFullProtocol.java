@@ -55,4 +55,61 @@ public class SorFullProtocol {
     public void setPtsBlock(PtsBlock ptsBlock) {
         this.ptsBlock = ptsBlock;
     }
+
+    public byte[] toBytes(){
+        int totalSize = 0;
+        if (mapBlock != null) {
+            totalSize += mapBlock.toBytes().length;
+        }
+        if (gpBlock != null) {
+            totalSize += gpBlock.toBytes().length;
+        }
+        if (spBlock != null) {
+            totalSize += spBlock.toBytes().length;
+        }
+        if (fpBlock != null) {
+            totalSize += fpBlock.toBytes().length;
+        }
+        if (keBlock != null) {
+            totalSize += keBlock.toBytes().length;
+        }
+        if (ptsBlock != null) {
+            totalSize += ptsBlock.toBytes().length;
+        }
+
+        byte[] result = new byte[totalSize];
+        int pos = 0;
+
+        if (mapBlock != null) {
+            byte[] mbBytes = mapBlock.toBytes();
+            System.arraycopy(mbBytes, 0, result, pos, mbBytes.length);
+            pos += mbBytes.length;
+        }
+        if (gpBlock != null) {
+            byte[] gpBytes = gpBlock.toBytes();
+            System.arraycopy(gpBytes, 0, result, pos, gpBytes.length);
+            pos += gpBytes.length;
+        }
+        if (spBlock != null) {
+            byte[] spBytes = spBlock.toBytes();
+            System.arraycopy(spBytes, 0, result, pos, spBytes.length);
+            pos += spBytes.length;
+        }
+        if (fpBlock != null) {
+            byte[] fpBytes = fpBlock.toBytes();
+            System.arraycopy(fpBytes, 0, result, pos, fpBytes.length);
+            pos += fpBytes.length;
+        }
+        if (keBlock != null) {
+            byte[] keBytes = keBlock.toBytes();
+            System.arraycopy(keBytes, 0, result, pos, keBytes.length);
+            pos += keBytes.length;
+        }
+        if (ptsBlock != null) {
+            byte[] ptsBytes = ptsBlock.toBytes();
+            System.arraycopy(ptsBytes, 0, result, pos, ptsBytes.length);
+        }
+
+        return result;
+    }
 }

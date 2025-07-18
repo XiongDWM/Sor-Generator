@@ -1,6 +1,10 @@
 package org.xiong.sor.blocks;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import org.xiong.sor.UnsignedConvert;
 
 public class FixedParametersBlock {
     private String fpid="\\0";
@@ -219,4 +223,56 @@ public class FixedParametersBlock {
     public void setWc(long[] wc) {
         this.wc = wc;
     }
+    public byte[] toBytes() {
+        // 估算总长度，实际可根据协议调整
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+        // String转byte，假定定长或前加长度
+        byte[] fpidBytes = fpid.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)fpidBytes.length);
+        buffer.put(fpidBytes);
+
+        byte[] dtsBytes = dts.toByteArray();
+        buffer.put((byte)dtsBytes.length);
+        buffer.put(dtsBytes);
+
+        byte[] udBytes = ud.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)udBytes.length);
+        buffer.put(udBytes);
+
+        buffer.putShort(aw);
+        buffer.putShort(ao);
+        buffer.putLong(aod);
+        buffer.putShort(tpw);
+
+        for (short p : pwu) buffer.putShort(p);
+        for (long d : ds) buffer.putLong(d);
+        for (long n : nppw) buffer.putLong(n);
+
+        buffer.putLong(gi);
+        buffer.putShort(bc);
+        buffer.putLong(nav);
+        buffer.putShort(at);
+        buffer.putLong(ar);
+        buffer.putLong(ard);
+        buffer.putLong(fpo);
+
+        buffer.put(UnsignedConvert.intToUnsignedShortBytes(nf));
+        buffer.putShort(nfsf);
+        buffer.put(UnsignedConvert.intToUnsignedShortBytes(po));
+        buffer.put(UnsignedConvert.intToUnsignedShortBytes(rt));
+        buffer.put(UnsignedConvert.intToUnsignedShortBytes(et));
+
+        byte[] ttBytes = tt.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)ttBytes.length);
+        buffer.put(ttBytes);
+        for (long w : wc) buffer.putLong(w);
+
+        // 截取实际长度
+        byte[] result = new byte[buffer.position()];
+        buffer.flip();
+        buffer.get(result);
+        return result;
+    }
+    
 }

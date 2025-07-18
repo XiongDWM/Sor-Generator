@@ -1,5 +1,10 @@
 package org.xiong.sor.blocks;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import org.xiong.sor.UnsignedConvert;
+
 public class PtsBlock {
     private String dpid="DataPts\\0";
     private long tndp;
@@ -36,5 +41,26 @@ public class PtsBlock {
 
     public void setSf(int[] sf) {
         this.sf = sf;
+    }
+
+    public byte[] toBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        byte[] dpidBytes = dpid.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)dpidBytes.length);
+        buffer.put(dpidBytes);
+        buffer.putLong(tndp);
+        buffer.putShort(tsf);
+        if (sf != null) {
+            buffer.put((byte)sf.length);
+            for (int s : sf) {
+                buffer.put(UnsignedConvert.intToUnsignedShortBytes(s));
+            }
+        } else {
+            buffer.put((byte)0);
+        }
+        byte[] result = new byte[buffer.position()];
+        buffer.flip();
+        buffer.get(result);
+        return result;
     }
 }

@@ -1,5 +1,7 @@
 package org.xiong.sor.blocks;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class KeyEventsBlock {
@@ -13,6 +15,47 @@ public class KeyEventsBlock {
         String lmt; // loss measurement technique 2 bytes
         long[] ml=new long[5]; // marker locations size=5
         String cmt="\\0"; //comment
+
+        public byte[] toBytes() {
+            ByteBuffer buffer = ByteBuffer.allocate(64);
+
+            buffer.putShort(en);
+            buffer.putLong(ept);
+            buffer.putShort(aci);
+            buffer.putShort(el);
+            buffer.putLong(er);
+
+            // ec: 固定6字节
+            byte[] ecBytes = ec == null ? new byte[6] : ec.getBytes(StandardCharsets.UTF_8);
+            if (ecBytes.length < 6) {
+                byte[] tmp = new byte[6];
+                System.arraycopy(ecBytes, 0, tmp, 0, ecBytes.length);
+                ecBytes = tmp;
+            }
+            buffer.put(ecBytes, 0, 6);
+
+            // lmt: 固定2字节
+            byte[] lmtBytes = lmt == null ? new byte[2] : lmt.getBytes(StandardCharsets.UTF_8);
+            if (lmtBytes.length < 2) {
+                byte[] tmp = new byte[2];
+                System.arraycopy(lmtBytes, 0, tmp, 0, lmtBytes.length);
+                lmtBytes = tmp;
+            }
+            buffer.put(lmtBytes, 0, 2);
+
+            // ml: 5个long
+            for (long m : ml) buffer.putLong(m);
+
+            // cmt: 长度+内容
+            byte[] cmtBytes = cmt.getBytes(StandardCharsets.UTF_8);
+            buffer.put((byte)cmtBytes.length);
+            buffer.put(cmtBytes);
+
+            byte[] result = new byte[buffer.position()];
+            buffer.flip();
+            buffer.get(result);
+            return result;
+        }
 
     }
     private String keId="KeyEvents\\0";
@@ -59,5 +102,37 @@ public class KeyEventsBlock {
 
     public void setRlmp(long[] rlmp) {
         this.rlmp = rlmp;
+    }
+    public byte[] toBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+        // keId
+        byte[] keIdBytes = keId.getBytes(StandardCharsets.UTF_8);
+        buffer.put((byte)keIdBytes.length);
+        buffer.put(keIdBytes);
+
+        // tnke
+        buffer.putShort(tnke);
+
+        // events
+        if (events != null) {
+            buffer.put((byte)events.size());
+            for (Event e : events) {
+                buffer.put(e.toBytes());
+            }
+        } else {
+            buffer.put((byte)0);
+        }
+
+        // eel
+        buffer.putLong(eel);
+
+        // rlmp
+        for (long v : rlmp) buffer.putLong(v);
+
+        byte[] result = new byte[buffer.position()];
+        buffer.flip();
+        buffer.get(result);
+        return result;
     }
 }
