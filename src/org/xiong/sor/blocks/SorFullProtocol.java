@@ -60,27 +60,31 @@ public class SorFullProtocol {
     public byte[] toBytes(){
         int totalSize = 0;
         short blockCount = 1; // because MapBlock is always present
-
+        if(gpBlock!=null)blockCount++;
+        if(fpBlock!=null)blockCount++;
+        if(spBlock != null)blockCount++;
+        if(ptsBlock != null)blockCount++;
         MapBlock mapBlock = this.getMapBlock();
         
+
         int index = 0;
         MapBlock.BlockMeta[] metaInfo = new MapBlock.BlockMeta[blockCount-1]; // -1 because MapBlock does not have meta info
         if(gpBlock != null) {
             totalSize += gpBlock.toBytes().length;
             metaInfo[index] = new MapBlock.BlockMeta(gpBlock.getPdId(), 0,gpBlock.toBytes().length);
-            blockCount++;
+
             index++;
         }
         if(spBlock != null) {
             totalSize += spBlock.toBytes().length;
             metaInfo[index] = new MapBlock.BlockMeta(spBlock.getMfId(), 0, spBlock.toBytes().length);
-            blockCount++;
+
             index++;
         }
         if(fpBlock != null) {
             totalSize += fpBlock.toBytes().length;
             metaInfo[index] = new MapBlock.BlockMeta(fpBlock.getFpid(), 0, fpBlock.toBytes().length);
-            blockCount++;
+
             index++;
         }
         if(keBlock != null) {
@@ -89,11 +93,10 @@ public class SorFullProtocol {
             blockCount++;
             index++;
         }
+
         if(ptsBlock != null) {
             totalSize += ptsBlock.toBytes().length;
             metaInfo[index] = new MapBlock.BlockMeta(ptsBlock.getDpid(), 0, ptsBlock.toBytes().length);
-            blockCount++;
-            index++;
         }
 
         if (mapBlock != null) {
