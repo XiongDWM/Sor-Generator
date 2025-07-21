@@ -10,7 +10,7 @@ import org.xiong.sor.UnsignedConvert;
 public class FixedParametersBlock {
     private String fpid="\\0";
     private BigInteger dts=new BigInteger(Long.toUnsignedString(System.currentTimeMillis())); // current time
-    private String ud="mt"; // units of distance
+    private String ud="mt"; // units of distance default meter
     private short aw= 1310; // actual wavelength
     private short ao=0;
     private long aod=0L;
