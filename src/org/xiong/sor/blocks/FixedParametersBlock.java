@@ -233,8 +233,7 @@ public class FixedParametersBlock {
         buffer.put((byte)fpidBytes.length);
         buffer.put(fpidBytes);
 
-        byte[] dtsBytes = dts.toByteArray();
-        buffer.put((byte)dtsBytes.length);
+        byte[] dtsBytes = UnsignedConvert.BigIntToUnsignedLongBytes(dts);
         buffer.put(dtsBytes);
 
         byte[] udBytes = ud.getBytes(StandardCharsets.UTF_8);
