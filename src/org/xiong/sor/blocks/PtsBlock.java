@@ -1,6 +1,7 @@
 package org.xiong.sor.blocks;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 import org.xiong.sor.UnsignedConvert;
@@ -44,7 +45,7 @@ public class PtsBlock {
     }
 
     public byte[] toBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(1024).order(ByteOrder.BIG_ENDIAN);
         byte[] dpidBytes = dpid.getBytes(StandardCharsets.UTF_8);
         buffer.put((byte)dpidBytes.length);
         buffer.put(dpidBytes);

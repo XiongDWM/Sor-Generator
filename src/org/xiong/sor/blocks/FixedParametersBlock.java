@@ -2,6 +2,7 @@ package org.xiong.sor.blocks;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 import org.xiong.sor.UnsignedConvert;
@@ -225,7 +226,7 @@ public class FixedParametersBlock {
     }
     public byte[] toBytes() {
         // 估算总长度，实际可根据协议调整
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(1024).order(ByteOrder.BIG_ENDIAN);
 
         // String转byte，假定定长或前加长度
         byte[] fpidBytes = fpid.getBytes(StandardCharsets.UTF_8);

@@ -1,6 +1,7 @@
 package org.xiong.sor.blocks;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 public class GeneralParametersBlock {
@@ -133,7 +134,7 @@ public class GeneralParametersBlock {
 
 
     public byte[] toBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(256);
+        ByteBuffer buffer = ByteBuffer.allocate(256).order(ByteOrder.BIG_ENDIAN);
 
         byte[] pdIdBytes = pdId.getBytes(StandardCharsets.UTF_8);
         buffer.put((byte)pdIdBytes.length);

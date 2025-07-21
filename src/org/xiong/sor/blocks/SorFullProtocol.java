@@ -1,5 +1,6 @@
 package org.xiong.sor.blocks;
 
+
 public class SorFullProtocol {
     private MapBlock mapBlock;
     private GeneralParametersBlock gpBlock;
@@ -58,23 +59,46 @@ public class SorFullProtocol {
 
     public byte[] toBytes(){
         int totalSize = 0;
-        if (mapBlock != null) {
-            totalSize += mapBlock.toBytes().length;
-        }
-        if (gpBlock != null) {
+        short blockCount = 1; // because MapBlock is always present
+
+        MapBlock mapBlock = this.getMapBlock();
+        
+        int index = 0;
+        MapBlock.BlockMeta[] metaInfo = new MapBlock.BlockMeta[blockCount-1]; // -1 because MapBlock does not have meta info
+        if(gpBlock != null) {
             totalSize += gpBlock.toBytes().length;
+            metaInfo[index] = new MapBlock.BlockMeta(gpBlock.getPdId(), 0,gpBlock.toBytes().length);
+            blockCount++;
+            index++;
         }
-        if (spBlock != null) {
+        if(spBlock != null) {
             totalSize += spBlock.toBytes().length;
+            metaInfo[index] = new MapBlock.BlockMeta(spBlock.getMfId(), 0, spBlock.toBytes().length);
+            blockCount++;
+            index++;
         }
-        if (fpBlock != null) {
+        if(fpBlock != null) {
             totalSize += fpBlock.toBytes().length;
+            metaInfo[index] = new MapBlock.BlockMeta(fpBlock.getFpid(), 0, fpBlock.toBytes().length);
+            blockCount++;
+            index++;
         }
-        if (keBlock != null) {
+        if(keBlock != null) {
             totalSize += keBlock.toBytes().length;
+            metaInfo[index] = new MapBlock.BlockMeta(keBlock.getKeId(), 0, keBlock.toBytes().length);
+            blockCount++;
+            index++;
         }
-        if (ptsBlock != null) {
+        if(ptsBlock != null) {
             totalSize += ptsBlock.toBytes().length;
+            metaInfo[index] = new MapBlock.BlockMeta(ptsBlock.getDpid(), 0, ptsBlock.toBytes().length);
+            blockCount++;
+            index++;
+        }
+
+        if (mapBlock != null) {
+            mapBlock.setMetaInfo(metaInfo);
+            mapBlock.setNb(blockCount);
         }
 
         byte[] result = new byte[totalSize];

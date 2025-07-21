@@ -35,5 +35,4 @@ public class GenBlockMethods {
     public byte[] getProtocolBytes(SorFullProtocol protocol){
         return protocol.toBytes();
     }
-
 }

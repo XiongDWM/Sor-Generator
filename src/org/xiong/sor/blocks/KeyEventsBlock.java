@@ -1,6 +1,7 @@
 package org.xiong.sor.blocks;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -14,10 +15,10 @@ public class KeyEventsBlock {
         String ec; // event code 6 bytes
         String lmt; // loss measurement technique 2 bytes
         long[] ml=new long[5]; // marker locations size=5
-        String cmt="\\0"; //comment
+        String cmt="\\0"; // comment
 
         public byte[] toBytes() {
-            ByteBuffer buffer = ByteBuffer.allocate(64);
+            ByteBuffer buffer = ByteBuffer.allocate(64).order(ByteOrder.BIG_ENDIAN);
 
             buffer.putShort(en);
             buffer.putLong(ept);
@@ -103,6 +104,7 @@ public class KeyEventsBlock {
     public void setRlmp(long[] rlmp) {
         this.rlmp = rlmp;
     }
+
     public byte[] toBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
 
@@ -128,7 +130,8 @@ public class KeyEventsBlock {
         buffer.putLong(eel);
 
         // rlmp
-        for (long v : rlmp) buffer.putLong(v);
+        for (long v : rlmp) buffer.putLong(v);  
+        
 
         byte[] result = new byte[buffer.position()];
         buffer.flip();

@@ -1,6 +1,8 @@
 package org.xiong.sor.blocks;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
 
 import org.xiong.sor.UnsignedConvert;
 
@@ -10,22 +12,40 @@ public class MapBlock {
         int reversionId=0; // unsigned short
         long size=0;
 
+        public BlockMeta(){
+
+        }
+
+        public BlockMeta(String bid, int reversionId, long size) {
+            this.bid = bid;
+            this.reversionId = reversionId;
+            this.size = size;
+        }
+        
         public byte[] toBytes() {
             byte[] bidBytes = bid.getBytes();
-            byte[] reversionIdBytes = UnsignedConvert.intToUnsignedShortBytes(reversionId);
-            byte[] sizeBytes = ByteBuffer.allocate(Long.BYTES).putLong(size).array();
+            ByteBuffer buffer = ByteBuffer.allocate(bidBytes.length + 2 + 4).order(ByteOrder.BIG_ENDIAN); 
 
-            byte[] result = new byte[bidBytes.length + reversionIdBytes.length + sizeBytes.length];
-            System.arraycopy(bidBytes, 0, result, 0, bidBytes.length);
-            System.arraycopy(reversionIdBytes, 0, result, bidBytes.length, reversionIdBytes.length);
-            System.arraycopy(sizeBytes, 0, result, bidBytes.length + reversionIdBytes.length, sizeBytes.length);
+            buffer.put(bidBytes);
+            buffer.put(UnsignedConvert.intToUnsignedShortBytes(reversionId)); // unsigned short 2 bytes
+            buffer.putLong(size); 
+
+            byte[] result = new byte[buffer.position()];
+            buffer.flip();
+            buffer.get(result);
             return result;
         }
+
+        @Override
+        public String toString() {
+            return "BlockMeta [bid=" + bid + ", reversionId=" + reversionId + ", size=" + size + "]";
+        }
+        
     }
     private String mbId="Map\\0";
     private int mrn=0; // unsigned short
-    private long mbs=0L;
-    private short nb=5;
+    private long mbs=0L; 
+    private short nb=5; // number of block meta info, default 5
     private BlockMeta[] metaInfo;
 
     public String getMbId() {
@@ -69,29 +89,32 @@ public class MapBlock {
     }
 
     public byte[] toBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(1024).order(ByteOrder.BIG_ENDIAN);
 
         byte[] mbIdBytes = mbId.getBytes();
         buffer.put((byte)mbIdBytes.length);
         buffer.put(mbIdBytes);
 
-        buffer.putShort((short)mrn);
+        buffer.put(UnsignedConvert.intToUnsignedShortBytes(mrn));
 
         buffer.putLong(mbs);
 
         buffer.putShort(nb);
 
-        // metaInfo: 数组长度+每个BlockMeta的字节数组
         buffer.putShort((short)metaInfo.length);
-        for (BlockMeta meta : metaInfo) {
-            byte[] metaBytes = meta.toBytes();
-            buffer.putShort((short)metaBytes.length);
-            buffer.put(metaBytes);
-        }
 
         byte[] result = new byte[buffer.position()];
+        
         buffer.flip();
         buffer.get(result);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "MapBlock [mbId=" + mbId + ", mrn=" + mrn + ", mbs=" + mbs + ", nb=" + nb + ", metaInfo="
+                + Arrays.toString(metaInfo) + "]";
+    }
+
+    
 }
