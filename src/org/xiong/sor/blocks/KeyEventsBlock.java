@@ -3,10 +3,11 @@ package org.xiong.sor.blocks;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeyEventsBlock {
-    static class Event{
+    public static class Event{
         short en=1; // event number
         long ept=0; // event propagation time
         short aci=0; // attenuation coefficient lead-in fiber
@@ -17,6 +18,7 @@ public class KeyEventsBlock {
         long[] ml=new long[5]; // marker locations size=5
         String cmt="\\0"; // comment
 
+        
         public byte[] toBytes() {
             ByteBuffer buffer = ByteBuffer.allocate(64).order(ByteOrder.BIG_ENDIAN);
 
@@ -56,6 +58,51 @@ public class KeyEventsBlock {
             buffer.flip();
             buffer.get(result);
             return result;
+        }
+
+
+        public void setEn(short en) {
+            this.en = en;
+        }
+
+
+        public void setEpt(long ept) {
+            this.ept = ept;
+        }
+
+
+        public void setAci(short aci) {
+            this.aci = aci;
+        }
+
+
+        public void setEl(short el) {
+            this.el = el;
+        }
+
+
+        public void setEr(long er) {
+            this.er = er;
+        }
+
+
+        public void setEc(String ec) {
+            this.ec = ec;
+        }
+
+
+        public void setLmt(String lmt) {
+            this.lmt = lmt;
+        }
+
+
+        public void setMl(long[] ml) {
+            this.ml = ml;
+        }
+
+
+        public void setCmt(String cmt) {
+            this.cmt = cmt;
         }
 
     }
@@ -137,5 +184,12 @@ public class KeyEventsBlock {
         buffer.flip();
         buffer.get(result);
         return result;
+    }
+
+    public void addEvent(Event event) {
+        if (events == null) {
+            events = new ArrayList<>();
+        }
+        events.add(event);
     }
 }
