@@ -1,9 +1,15 @@
 package org.xiong;
 
-public record SorSample(
-    int[] curve, 
-    String eventComment
-    ) {
+public class SorSample {
+    private int[] curve;
+    private String eventComment;
+
+    public SorSample() {
+    }
+    public SorSample(int[] curve, String eventComment) {
+        this.curve = curve;
+        this.eventComment = eventComment;
+    }
 
     public int[] getCurve() {
         return curve;
@@ -12,4 +18,4 @@ public record SorSample(
     public String getEventComment() {
         return eventComment;
     }
-} 
+}

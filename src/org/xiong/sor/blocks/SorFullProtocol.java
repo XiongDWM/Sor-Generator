@@ -3,6 +3,7 @@ package org.xiong.sor.blocks;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class SorFullProtocol {
     private MapBlock mapBlock;
     private GeneralParametersBlock gpBlock;
