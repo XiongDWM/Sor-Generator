@@ -1,5 +1,5 @@
 # SOR(.sor) 文件生成
-[中文](READM.cn.md)｜[English](README.md) 
+[中文](READM.md)｜[English](README.en.md) 
 
 生成 SOR (.sor) 文件，遵循 Telcordia SR-4731 issue2 (July 2011) 标准。
 
