@@ -20,7 +20,7 @@ public class KeyEventsBlock {
 
         
         public byte[] toBytes() {
-            ByteBuffer buffer = ByteBuffer.allocate(64).order(ByteOrder.BIG_ENDIAN);
+            ByteBuffer buffer = ByteBuffer.allocate(256).order(ByteOrder.BIG_ENDIAN);
 
             buffer.putShort(en);
             buffer.putLong(ept);

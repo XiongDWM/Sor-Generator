@@ -132,4 +132,12 @@ public class SorFullProtocol {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SorFullProtocol [mapBlock=" + mapBlock + ", gpBlock=" + gpBlock + ", spBlock=" + spBlock + ", fpBlock="
+                + fpBlock + ", keBlock=" + keBlock + ", ptsBlock=" + ptsBlock + "]";
+    }
+
+    
 }

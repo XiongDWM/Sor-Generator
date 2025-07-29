@@ -1,5 +1,7 @@
 package org.xiong;
 
+import java.util.Arrays;
+
 import org.xiong.sor.GenBlockMethods;
 import org.xiong.sor.blocks.GeneralParametersBlock;
 import org.xiong.sor.blocks.KeyEventsBlock;
@@ -33,8 +35,10 @@ public class Main {
                 sor.setKeBlock(keyEventsBlock);
                 sor.setSpBlock(supplierParametersBlock);
                 sor.setPtsBlock(ptsBlock);
+                
+                // convert data to blocks
 
-                return new SorFullProtocol();
+                return sor;
             }
         };
         SorSample sample = new SorSample(new int[]{1, 2, 3}, "Sample Event");
@@ -42,6 +46,7 @@ public class Main {
         System.out.println("Converted protocol: " + protocol.toString());
         byte[] protocolBytes = GenBlockMethods.getProtocolBytes(protocol);
         System.out.println("bytes length: " + protocolBytes.length);
+        System.out.println("bytes: " + Arrays.toString(protocolBytes));
 
     }  
     
