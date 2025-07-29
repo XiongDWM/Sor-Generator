@@ -13,10 +13,16 @@ Generate SOR (.sor) files following Telcordia's SR-4731 Issue 2 (July 2011) stan
 ## Quick Start
 
 ```java
-// Extend GenBlockMethods and implement your own data-to-SOR conversion logic
-public class MyBlockMethods extends GenBlockMethods<MyDataType> {
+import org.xiong.sor.GenBlockMethods;
+import org.xiong.sor.blocks.SorFullProtocol;
+
+// Define your own data type, e.g. SorSample
+SorSample sample = new SorSample(new int[]{1, 2, 3}, "Sample Event");
+
+// Use anonymous class or subclass to implement your conversion logic
+GenBlockMethods<SorSample> genBlockMethods = new GenBlockMethods<>() {
     @Override
-    public SorFullProtocol convertSorProtocol(MyDataType origin) {
+    public SorFullProtocol convertSorProtocol(SorSample origin) {
         SorFullProtocol sor = new SorFullProtocol();
         // Fill in each block as needed
         // sor.setGpBlock(...);
@@ -24,12 +30,11 @@ public class MyBlockMethods extends GenBlockMethods<MyDataType> {
         // ...
         return sor;
     }
-}
+};
 
-// Serialize to SOR byte array
-MyBlockMethods methods = new MyBlockMethods();
-SorFullProtocol sor = methods.convertSorProtocol(myData);
-byte[] sorBytes = methods.getProtocolBytes(sor);
+// Convert your data to SOR protocol and get the byte array
+SorFullProtocol protocol = genBlockMethods.convertSorProtocol(sample);
+byte[] sorBytes = GenBlockMethods.getProtocolBytes(protocol);
 ```
 
 ## Publishing & Dependency
@@ -38,7 +43,7 @@ byte[] sorBytes = methods.getProtocolBytes(sor);
 - Example dependency:
 
 ```groovy
-implementation 'org.xiong:genSor:1.0.0'
+implementation 'org.xiong:sor-generator:1.0.0'
 ``` 
 
 ## Reference

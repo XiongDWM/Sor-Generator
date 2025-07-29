@@ -13,21 +13,28 @@
 ## 快速开始
 
 ```java
-// 继承 GenBlockMethods，实现自己的数据到 SOR 协议的转换
-public class MyBlockMethods extends GenBlockMethods<MyDataType> {
+import org.xiong.sor.GenBlockMethods;
+import org.xiong.sor.blocks.SorFullProtocol;
+
+// 定义的数据类型, 例如 SorSample
+SorSample sample = new SorSample(new int[]{1, 2, 3}, "Sample Event");
+
+// 使用匿名类或子类实现自定义数据类和SOR协议封装的转换
+GenBlockMethods<SorSample> genBlockMethods = new GenBlockMethods<>() {
     @Override
-    public SorFullProtocol convertSorProtocol(MyDataType origin) {
-        // 构建并填充各 Block
+    public SorFullProtocol convertSorProtocol(SorSample origin) {
         SorFullProtocol sor = new SorFullProtocol();
-        // ...填充各 block...
+        // 按需填充各个数据块
+        // sor.setGpBlock(...);
+        // sor.setFpBlock(...);
+        // ...
         return sor;
     }
-}
+};
 
-// 序列化为 SOR 字节流
-MyBlockMethods methods = new MyBlockMethods();
-SorFullProtocol sor = methods.convertSorProtocol(myData);
-byte[] sorBytes = methods.getProtocolBytes(sor);
+// 转换数据并获取序列化数据
+SorFullProtocol protocol = genBlockMethods.convertSorProtocol(sample);
+byte[] sorBytes = GenBlockMethods.getProtocolBytes(protocol);
 ```
 
 ## 发布与依赖
@@ -36,7 +43,7 @@ byte[] sorBytes = methods.getProtocolBytes(sor);
 - 依赖方式（示例）：
 
 ```groovy
-implementation 'org.xiong:genSor:1.0.0'
+implementation 'org.xiong:sor-generator:1.0.0'
 ```
 
 ## 参考
